@@ -11,8 +11,42 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ;; Define a spec
 (s/def ::name string?)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -33,19 +67,33 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ;; More complex spec
 (s/def ::name (s/and string?
                      seq))
 
-
-
-
-
-
-
 (s/explain ::name "John Dillinger")
 
 (s/explain ::name "")
+
+
+
+
+
+
+
 
 
 
@@ -66,9 +114,29 @@
 
 
 
+
+
+
+
+
+
+
+
 (u/make ::name)
 
 (u/make ::name 10)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -84,13 +152,17 @@
 
 (s/def ::name (s/keys :req [::firstname ::lastname]))
 
-
-
-
-
-
-
 (u/make ::name)
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -128,19 +200,20 @@
 
 ;; More detail in spectalk.fnspec
 
-
-
-
-
-
-
-
-
 (stest/instrument `ranged-rand)
 
 (ranged-rand 3 5)
 
 (ranged-rand 8 :dog)
+
+
+
+
+
+
+
+
+
 
 
 
@@ -206,23 +279,29 @@
     ;; (implicit else)
     (s/explain ::name name)))
 
-
-
-
-
 (def me {::firstname "Egg"
          ::lastname "Syntax"})
 
 (welcome me)
 
+
 (def tom {::firstname "Tom"})
 
 (welcome tom)
+
 
 (def jon {::firstname "Jon"
           ::lastname 7})
 
 (welcome jon)
+
+
+
+
+
+
+
+
 
 
 
@@ -253,9 +332,6 @@
 
 
 
-
-
-
 (s/def ::address
   (s/cat :street-num int?
          :street-name string?
@@ -265,3 +341,29 @@
 (s/valid? ::address my-address)
 
 (s/conform ::address my-address)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;; The end!
+;; More info:
+;; - This code: https://github.com/eggsyntax/spectalk
+;; - Spec overview: http://clojure.org/about/spec
+;; - Spec guide: http://clojure.org/guides/spec
