@@ -99,6 +99,22 @@
 
 
 
+;; Define a function
+(defn ranged-rand
+  "Returns random int in range start <= rand < end"
+  [start end]
+  (+ start (long (rand (- end start)))))
+
+
+
+
+
+
+
+
+
+
+;; Spec the function
 (s/fdef ranged-rand
         :args (s/and (s/cat :start int? :end int?)
                      #(< (:start %) (:end %)))
@@ -109,19 +125,16 @@
 
 
 
+
 ;; More detail in spectalk.fnspec
 
 
 
-;; Define a function
-(defn ranged-rand
-  "Returns random int in range start <= rand < end"
-  [start end]
-  (+ start (long (rand (- end start)))))
 
-;; Spec the function
-(s/fdef ranged-rand
-        :args (s/and (s/cat :start int? :end int?)))
+
+
+
+
 
 (stest/instrument `ranged-rand)
 
@@ -131,18 +144,124 @@
 
 
 
-(ranged-rand 5 3)
-
-;; Add a condition
-(s/fdef ranged-rand
-        :args (s/and (s/cat :start int? :end int?)
-                     #(< (:start %) (:end %))))
 
 
 
-(stest/instrument `ranged-rand)
-
-(ranged-rand 5 3)
 
 
+
+
+
+
+
+
+
+
+;; Other features:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;; Generative testing:
 (stest/check `ranged-rand)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+;; Validation:
+(defn welcome [name]
+  (if (s/valid? ::name name)
+    (println "Welcome, Ms or Mr"
+             (::firstname name)
+             (::lastname name))
+    ;; (implicit else)
+    (s/explain ::name name)))
+
+
+
+
+
+(def me {::firstname "Egg"
+         ::lastname "Syntax"})
+
+(welcome me)
+
+(def tom {::firstname "Tom"})
+
+(welcome tom)
+
+(def jon {::firstname "Jon"
+          ::lastname 7})
+
+(welcome jon)
+
+
+
+
+
+
+
+
+
+
+
+
+;; Destructuring
+
+(def my-address
+  [73 "Random Lane" "Asheville" :NC])
+
+(defn welcome-address [address]
+  (let [street-num  (nth address 0)
+        street-name (nth address 1)
+        city        (nth address 2)
+        state       (nth address 3)]
+    (println "Welcome to" street-num
+             street-name city state "!")))
+
+(welcome-address my-address)
+
+
+
+
+
+
+
+(s/def ::address
+  (s/cat :street-num int?
+         :street-name string?
+         :city string?
+         :state keyword?))
+
+(s/valid? ::address my-address)
+
+(s/conform ::address my-address)
